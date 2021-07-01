@@ -1,62 +1,21 @@
- let movies = [
-    {
-      id: "0",
-      name: "Iron Man",
-      score : 9
-    },
-    {
-      id: "1",
-      name: "Thor",
-      score : 8
+const API_URL = "https://yts.mx/api/v2/list_movies.json?"
+const fetch = require("node-fetch");
 
-    },
-    {
-      id: "2",
-      name: "Loki",
-      score : 7
+const getMovies = (limit, rating) => {
 
-    },
-    {
-      id: "3",
-      name: "The Avengers",
-      score : 10
-
-    }   
-  ];
-
-const getById = id => {
-
-  console.log(id);
-  const filteredMovies = movies.filter(movie => String(id) === movie.id)
-  return filteredMovies[0]  
-}
-
-const getMovies = () => {
-  return movies;
-}
-
-const deleteMovie = id => {
-  const cleanedMovies = movies.filter(movie => movie.id !== String(id));
-  if (movies.length > cleanedMovies.length) {
-    movies = cleanedMovies;
-    return true;
-  } else {
-    return false;
-  }
-}
-
-const addMovie = (name, score) => {
-  const newMovie = {
-    id : `${movies.length + 1}`,
-    name,
-    score
-  };
-  movies.push(newMovie);
-  return newMovie;
-}
-
-
-  module.exports = {
-    getMovies, getById, deleteMovie, addMovie
+  let REQUEST_URL = API_URL;
+  if (limit > 0 ){
+    REQUEST_URL += `limit=${limit}`;
   }
 
+  if(rating > 0) {
+    REQUEST_URL += `&minimum_rating=${rating}`;
+    console.log(REQUEST_URL);
+  }
+
+  return fetch(`${REQUEST_URL}`)
+          .then(res => res.json())
+          .then(json => json.data.movies);
+}
+
+module.exports = {getMovies};

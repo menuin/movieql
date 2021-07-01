@@ -5,14 +5,9 @@ const movieFunction = require('./db.js');
 
 const resolvers = {
     Query : {
-        movies : () => movieFunction.getMovies(),
-        movie : (_, {id}) => movieFunction.getById(id)
+        movies : (_,{limit, rating}) => movieFunction.getMovies(limit, rating),
+       
     },
-
-    Mutation : {
-        addMovie: (_, {name, score}) => movieFunction.addMovie(name, score),
-        deleteMovie : (_, {id}) => movieFunction.deleteMovie(id),
-    }
 };
 
 module.exports = resolvers;
